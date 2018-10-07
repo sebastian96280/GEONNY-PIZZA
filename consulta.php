@@ -83,7 +83,7 @@
                         <label class="col-form-label col-form-label-sm" for="inputSmall">Busqueda Especifica</label>
                         <input class="form-control form-control-sm" name="busqueda" type="text" placeholder="Buscar" id="inputSmall">
                     </div>
-                    <button type="submit" name="submit" class="btn btn-primary" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">BUSCAR</button>
+                    <button type="submit" name="submit" class="btn btn-primary">BUSCAR</button>
                 </div>
         </div>
         <?php
@@ -94,7 +94,8 @@
             $valor = filtrado($numero);
             $consulta = "DELETE FROM `cliente` WHERE `id_clientes`=$valor";
             $resultado = mysqli_query($conexion, $consulta)or die("Problemas en el select" . mysqli_error($conexion));
-            echo '<script> alert("El Usuario Ha Sido Eliminado");</script>';
+            mysqli_close($conexion);
+            echo '<script> alert("Ha Sido Eliminado");</script>';
         }
 
         function filtrado($datos) {
@@ -139,6 +140,7 @@
                     </table>
                 </div>
             </div>";
+                mysqli_close($conexion);
             } else if ($tipo == "CLIENTES" && $parametro != "") {
                 $consulta = "SELECT `id_clientes`, `nombre`, `apellido`, `correo` FROM `cliente`";
                 $resultado = mysqli_query($conexion, $consulta)or die("Problemas en el select" . mysqli_error($conexion));
@@ -198,7 +200,7 @@
                                 <td>$fila[0]</td>
                                 <td>$fila[1]</td>
                                 <td>$fila[2]</td>
-                                <td>$fila[3]</td>
+                                <td><img width='35%' src='/PhpProject2/IMAGENES/Productos/$fila[3]'></td>
                                  <td>
                                     <button type='actualizar' value='$fila[0]'class='btn btn-info' name='actualizar'>ACTUALIZAR</button>
                                 </td>
@@ -207,6 +209,7 @@
                     </table>
                 </div>
             </div>";
+                mysqli_close($conexion);
             } else if ($tipo == "PRODUCTOS" && $parametro != "") {
                 
             }
@@ -237,7 +240,7 @@
                 echo"<tr class='table-dark'>
                                 <td>$fila[0]</td>
                                 <td>$fila[1]</td>
-                                <td><input name='precio' type='text' class='form-control' placeholder=$fila[2]></td>
+                                <td><input name='precio' type='text' class='form-control' placeholder=$fila[2] value=$fila[2]></td>
                                 <td><input name='file' type='file' class='form-control' ></td>
                                 <td>
                                     <button type='guardar' value='$fila[0]' class='btn btn-success' name='guardar' >GUARDAR</button>
@@ -247,14 +250,24 @@
                     </table>
                 </div>
             </div>";
+            mysqli_close($conexion);
         }
         if (isset($_POST["guardar"]) && $_SERVER["REQUEST_METHOD"] == "POST") {
-            echo $id=$_POST["guardar"];
-            echo $precio=$_POST["precio"];
-            echo $nombreImagen=$_FILES["file"]["name"];
-            $consulta="UPDATE `tipo-producto` SET `foto`=$nombreImagen WHERE `id_producto`=$id";
+            $id = $_POST["guardar"];
+            $precio = $_POST["precio"];
+            /* Caracteriticas de la imagen */
+            $nombreImagen = $_FILES["file"]["name"];
+            $tamaImagen = $_FILES["file"]["size"];
+            $tipoImagen = $_FILES["file"]["type"];
+            /* ruta donde se guardan las imagenes */
+            $rutaDestino = $_SERVER['DOCUMENT_ROOT'] . '/PhpProject2/IMAGENES/Productos/';
+            /* Movimiento de la imagen */
+            move_uploaded_file($_FILES["file"]["tmp_name"], $rutaDestino . $nombreImagen);
+            echo '<script> alert("El Producto Ha Sido Actualizado");</script>';
+            $consulta = "UPDATE `tipo-producto` SET `foto` = '$nombreImagen', `precio`=$precio WHERE `id_producto` = $id;";
             $resultado = mysqli_query($conexion, $consulta)or die("Problemas en el select" . mysqli_error($conexion));
-            echo '<script> alert("El Usuario Ha Sido Eliminado");</script>';
+            mysqli_close($conexion);
+            
         }
         ?>
     </body>
