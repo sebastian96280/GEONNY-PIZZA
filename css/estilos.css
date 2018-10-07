@@ -12,12 +12,14 @@
 .desayunos {background-image:url(../IMAGENES/fondoDesayunos.jpg);background-size:cover;background-attachment:fixed;}
 .almuerzos {background-image:url(../IMAGENES/fondoAlmuerzos.jpg);background-size:cover;background-attachment:fixed;}
 .comidaRapida {background-image:url(../IMAGENES/fondoComidaRapida.jpg);background-size:cover;background-attachment:fixed;}
-
+.consulta{background-image:url(../IMAGENES/fondoConsulta1.jpg);background-size:cover;background-attachment:fixed;}
 /*fondo formularios */
 .col-lg-5{
     background: black;
     margin:auto;
 }
+/* centrado tabla consulta*/
+
 /*Tamaño logotipo GEONNYS PIZZA*/
 header div a img{
     width:25%;

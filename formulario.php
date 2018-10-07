@@ -172,14 +172,13 @@
                 mysqli_close($conexion);
                 echo '<script> alert("EL USUARIO YA SE ENCUENTRA REGISTRADO");</script>';
             } else {
-                $consulta = "INSERT INTO cliente (contrasena) VALUE ('$contraseña')";
                 $consulta = "INSERT INTO cliente(id_clientes,nombre,apellido,correo,contrasena)"
-                        . "VALUE ('$cc','$nombre','$apellido','$correo','$contraseña')";
-                $consulta2 = "INSERT INTO ubicacion(barrio,direccion) VALUE('$barrio','$direccion')";
+                        . "VALUE ('$cc','$nombre','$apellido','$correo',MD5('$contraseña'))";
+                $consulta2 = "INSERT INTO ubicacion(id_cliente,barrio,direccion) VALUE('$cc','$barrio','$direccion')";
                 if ($tipoTelef == "option1") {
-                    $consulta3 = "INSERT INTO telefono(fijo)VALUE('$telefo')";
+                    $consulta3 = "INSERT INTO telefono(id_cliente,numero,tipoTelefono)VALUE('$cc','$telefo','1')";
                 } else if ($tipoTelef == "option2") {
-                    $consulta3 = "INSERT INTO telefono(celular)VALUE('$telefo')";
+                    $consulta3 = "INSERT INTO telefono(id_cliente,numero,tipoTelefono)VALUE('$cc','$telefo','2')";
                 }
                 mysqli_query($conexion, $consulta) or die("Problemas en el select" . mysqli_error($conexion));
                 mysqli_query($conexion, $consulta2) or die("Problemas en el select" . mysqli_error($conexion));
